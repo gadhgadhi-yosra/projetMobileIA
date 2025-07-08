@@ -1,0 +1,45 @@
+name: supermarket_app_03072025
+description: A new Flutter project for a smart supermarket app.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  google_fonts: ^6.0.0 # Pour des polices modernes
+  lottie: ^3.0.0 # Pour les animations
+  provider: ^6.0.5 # Pour la gestion d'état simple
+  intl: ^0.18.1 # Pour la mise en forme des devises
+  url_launcher: ^6.1.12
+  carousel_slider: ^4.2.1
+  animated_splash_screen: ^1.2.0
+  firebase_core: ^2.25.4
+  firebase_auth: ^4.17.4
+  # google_sign_in: ^6.2.1
+  flutter_facebook_auth: ^6.1.1
+  flutter_secure_storage: ^9.0.0
+  http: ^1.2.0
+  cloud_firestore: ^4.9.2
+  mailer: ^6.0.0
+  
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/
+    - assets/animations/
+    - assets/images/
+  
+    
+  
