@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:supermarket_app_03072025/profile/profile_screen.dart';
+import 'package:supermarket_app_03072025/providers/navigation_provider.dart';
 import 'package:supermarket_app_03072025/providers/product_provider.dart';
 import 'package:supermarket_app_03072025/screens/auth/forgot_password_screen.dart';
 import 'package:supermarket_app_03072025/screens/auth/login_screen.dart';
@@ -16,6 +17,7 @@ import 'package:supermarket_app_03072025/screens/splash_screens/splash_screen.da
 import 'package:supermarket_app_03072025/stock/stock_management_screen.dart';
 import 'package:supermarket_app_03072025/utils/app_theme.dart';
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(); // 🔥 Initialiser Firebase
@@ -27,8 +29,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => ProductProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ProductProvider()),
+        ChangeNotifierProvider(create: (context) => NavigationProvider()), 
+      ],
       child: MaterialApp(
         title: 'Navin Supermarket',
         theme: AppTheme.darkTheme,

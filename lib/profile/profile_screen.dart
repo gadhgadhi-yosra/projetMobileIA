@@ -574,6 +574,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:supermarket_app_03072025/screens/auth/login_screen.dart';
 import 'package:supermarket_app_03072025/utils/app_styles.dart';
+import 'package:supermarket_app_03072025/widgets/custom_curved_navigation_bar.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -813,6 +814,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       ),
+       bottomNavigationBar: const CustomCurvedNavigationBar(), // Ajout de la barre de navigation
     );
   }
 }
