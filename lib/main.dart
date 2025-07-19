@@ -7,7 +7,7 @@ import 'package:supermarket_app_03072025/providers/navigation_provider.dart';
 import 'package:supermarket_app_03072025/providers/product_provider.dart';
 import 'package:supermarket_app_03072025/screens/auth/forgot_password_screen.dart';
 import 'package:supermarket_app_03072025/screens/auth/login_screen.dart';
-import 'package:supermarket_app_03072025/screens/auth/register_screen.dart';
+import 'package:supermarket_app_03072025/screens/auth/register_screen.dart' hide LoginScreen;
 import 'package:supermarket_app_03072025/screens/cart_screen.dart';
 import 'package:supermarket_app_03072025/screens/chatbot_screen.dart';
 import 'package:supermarket_app_03072025/screens/employees/employee_management_screen.dart';

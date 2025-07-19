@@ -1,9 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:supermarket_app_03072025/utils/app_styles.dart';
-
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -122,8 +120,15 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Connexion')),
+      appBar: AppBar(
+        title: Text('Connexion', style: textTheme.titleLarge?.copyWith(color: colorScheme.onPrimary)),
+        backgroundColor: colorScheme.primary,
+        elevation: 0,
+      ),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
@@ -141,15 +146,18 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                   child: TextFormField(
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Email',
-                      prefixIcon: Icon(Icons.email),
+                      prefixIcon: Icon(Icons.email, color: colorScheme.primary),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                      filled: true,
+                      fillColor: colorScheme.surfaceVariant.withOpacity(0.1),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Veuillez entrer votre email';
                       }
-                      if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                      if (!RegExp(r'^[a-zA-Z0-9._]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$').hasMatch(value)) {
                         return 'Veuillez entrer un email valide';
                       }
                       return null;
@@ -162,9 +170,12 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                   child: TextFormField(
                     controller: _passwordController,
                     obscureText: true,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Mot de passe',
-                      prefixIcon: Icon(Icons.lock),
+                      prefixIcon: Icon(Icons.lock, color: colorScheme.primary),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                      filled: true,
+                      fillColor: colorScheme.surfaceVariant.withOpacity(0.1),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -190,12 +201,17 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                   scale: _scaleAnimation,
                   child: ElevatedButton(
                     onPressed: _login,
-                    style: ElevatedButton.styleFrom(minimumSize: const Size(double.infinity, 50)),
-                    child: const Text('Se connecter'),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      backgroundColor: colorScheme.primary,
+                      foregroundColor: colorScheme.onPrimary,
+                    ),
+                    child: Text('Se connecter', style: textTheme.labelLarge?.copyWith(color: colorScheme.onPrimary)),
                   ),
                 ),
                 const SizedBox(height: 20),
-                const Text('Ou connectez-vous avec', style: TextStyle(fontSize: 16, color: Colors.grey)),
+                Text('Ou connectez-vous avec', style: TextStyle(fontSize: 16, color: colorScheme.onSurface.withOpacity(0.6))),
                 const SizedBox(height: 20),
                 SlideTransition(
                   position: _slideAnimation,
@@ -209,23 +225,25 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                           );
                         },
                         icon: Image.asset('assets/images/chercher.png', height: 24),
-                        label: const Text('Google'),
+                        label: Text('Google', style: textTheme.labelLarge?.copyWith(color: colorScheme.onSurface)),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: Colors.black,
-                          side: const BorderSide(color: Colors.grey),
+                          backgroundColor: colorScheme.surface,
+                          foregroundColor: colorScheme.onSurface,
+                          side: BorderSide(color: colorScheme.onSurface.withOpacity(0.2)),
                           minimumSize: const Size(150, 50),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         ),
                       ),
                       const SizedBox(width: 20),
                       ElevatedButton.icon(
                         onPressed: _loginWithFacebook,
                         icon: Image.asset('assets/images/facebook.png', height: 24),
-                        label: const Text('Facebook'),
+                        label: Text('Facebook', style: textTheme.labelLarge?.copyWith(color: colorScheme.onPrimary)),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF1877F2),
-                          foregroundColor: Colors.white,
+                          backgroundColor: colorScheme.primary,
+                          foregroundColor: colorScheme.onPrimary,
                           minimumSize: const Size(150, 50),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         ),
                       ),
                     ],

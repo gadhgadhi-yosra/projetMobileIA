@@ -1536,7 +1536,7 @@ class _EmployeeManagementScreenState extends State<EmployeeManagementScreen>
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-       bottomNavigationBar: const CustomCurvedNavigationBar(), // Ajout de la barre de navigation
+       bottomNavigationBar: const CustomCurvedNavigationBar(), 
     );
   }
 }

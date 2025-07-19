@@ -704,20 +704,17 @@
 //     );
 //   }
 // }
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:supermarket_app_03072025/utils/app_colors.dart';
-
 import 'package:supermarket_app_03072025/widgets/color_scheme_extension.dart';
 import 'package:supermarket_app_03072025/widgets/custom_curved_navigation_bar.dart';
-
 
 class StockProduct {
   final String name;
   final double price;
   final int stock;
-  final String status; 
+  final String status;
 
   StockProduct({
     required this.name,
@@ -725,7 +722,6 @@ class StockProduct {
     required this.stock,
     required this.status,
   });
-
 
   factory StockProduct.fromFirestore(Map<String, dynamic> data, String id) {
     return StockProduct(
@@ -735,7 +731,6 @@ class StockProduct {
       status: data['status'] ?? 'stable',
     );
   }
-
 
   Map<String, dynamic> toFirestore() {
     return {
@@ -754,20 +749,15 @@ class StockManagementScreen extends StatefulWidget {
   State<StockManagementScreen> createState() => _StockManagementScreenState();
 }
 
-class _StockManagementScreenState extends State<StockManagementScreen>
-    with SingleTickerProviderStateMixin {
+class _StockManagementScreenState extends State<StockManagementScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _priceController = TextEditingController();
   final _stockController = TextEditingController();
   final _searchController = TextEditingController();
-  String _selectedStatus = 'stable'; 
+  String _selectedStatus = 'stable';
   String _searchQuery = '';
-  AnimationController? _animationController;
-  Animation<double>? _fadeAnimation;
-  Animation<Offset>? _slideAnimation;
 
-  
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
@@ -778,16 +768,6 @@ class _StockManagementScreenState extends State<StockManagementScreen>
         _searchQuery = _searchController.text.trim();
       });
     });
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 400),
-    );
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut),
-    );
-    _slideAnimation = Tween<Offset>(begin: const Offset(0, 1), end: Offset.zero).animate(
-      CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut),
-    );
   }
 
   @override
@@ -796,11 +776,9 @@ class _StockManagementScreenState extends State<StockManagementScreen>
     _priceController.dispose();
     _stockController.dispose();
     _searchController.dispose();
-    _animationController?.dispose();
     super.dispose();
   }
 
- 
   void _showSnackBar(BuildContext context, String message, Color backgroundColor) {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
@@ -812,12 +790,11 @@ class _StockManagementScreenState extends State<StockManagementScreen>
         ),
         backgroundColor: backgroundColor,
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         margin: const EdgeInsets.all(10),
       ),
     );
   }
-
 
   Future<void> _showProductDialog({StockProduct? product, String? id}) async {
     final isEditing = product != null && id != null;
@@ -833,7 +810,6 @@ class _StockManagementScreenState extends State<StockManagementScreen>
       _selectedStatus = 'stable';
     }
 
-    _animationController?.forward();
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -842,350 +818,289 @@ class _StockManagementScreenState extends State<StockManagementScreen>
       ),
       backgroundColor: Colors.transparent,
       builder: (context) {
-        return SlideTransition(
-          position: _slideAnimation!,
-          child: FadeTransition(
-            opacity: _fadeAnimation!,
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Theme.of(context).colorScheme.surface,
-                    Theme.of(context).colorScheme.surface.withOpacity(0.95),
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
-                    blurRadius: 12,
-                    offset: const Offset(0, -2),
-                  ),
-                ],
+        return Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Theme.of(context).colorScheme.surface,
+                Theme.of(context).colorScheme.surface.withOpacity(0.95),
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+            boxShadow: [
+              BoxShadow(
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
+                blurRadius: 12,
+                offset: const Offset(0, -2),
               ),
-              child: StatefulBuilder(
-                builder: (BuildContext context, StateSetter setModalState) {
-                  final colorScheme = Theme.of(context).colorScheme;
-                  final textTheme = Theme.of(context).textTheme;
+            ],
+          ),
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setModalState) {
+              final colorScheme = Theme.of(context).colorScheme;
+              final textTheme = Theme.of(context).textTheme;
 
-                  return Padding(
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-                      left: 24,
-                      right: 24,
-                      top: 32,
-                    ),
-                    child: Form(
-                      key: _formKey,
-                      child: SingleChildScrollView(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+              return Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+                  left: 24,
+                  right: 24,
+                  top: 32,
+                ),
+                child: Form(
+                  key: _formKey,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  isEditing ? 'Modifier le produit' : 'Ajouter un produit',
-                                  style: textTheme.headlineSmall?.copyWith(
-                                    color: colorScheme.onSurface,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.close, color: colorScheme.onSurface.withOpacity(0.6)),
-                                  onPressed: () {
-                                    _animationController?.reverse().then((_) => Navigator.pop(context));
-                                  },
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 24),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: colorScheme.surfaceVariant.withOpacity(0.05),
-                                borderRadius: BorderRadius.circular(16),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: colorScheme.onSurface.withOpacity(0.1),
-                                    blurRadius: 8,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: TextFormField(
-                                controller: _nameController,
-                                decoration: InputDecoration(
-                                  labelText: 'Nom du produit',
-                                  hintText: 'Ex: Smartphone X',
-                                  prefixIcon: Icon(Icons.shopping_bag_outlined, color: colorScheme.primary),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(16),
-                                    borderSide: BorderSide.none,
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(16),
-                                    borderSide: BorderSide(color: colorScheme.primary, width: 2),
-                                  ),
-                                  errorStyle: textTheme.bodySmall?.copyWith(color: colorScheme.error),
-                                  contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                                ),
-                                style: textTheme.bodyLarge?.copyWith(color: colorScheme.onSurface),
-                                validator: (value) {
-                                  if (value == null || value.trim().isEmpty) {
-                                    return 'Veuillez entrer le nom du produit';
-                                  }
-                                  return null; 
-                                },
+                            Text(
+                              isEditing ? 'Modifier le produit' : 'Ajouter un produit',
+                              style: textTheme.titleMedium?.copyWith(
+                                color: colorScheme.onSurface,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const SizedBox(height: 16),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: colorScheme.surfaceVariant.withOpacity(0.05),
-                                borderRadius: BorderRadius.circular(16),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: colorScheme.onSurface.withOpacity(0.1),
-                                    blurRadius: 8,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: TextFormField(
-                                controller: _priceController,
-                                keyboardType: TextInputType.number,
-                                decoration: InputDecoration(
-                                  labelText: 'Prix (DT)',
-                                  hintText: 'Ex: 99.99',
-                                  prefixIcon: Icon(Icons.monetization_on_outlined, color: colorScheme.primary),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(16),
-                                    borderSide: BorderSide.none,
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(16),
-                                    borderSide: BorderSide(color: colorScheme.primary, width: 2),
-                                  ),
-                                  errorStyle: textTheme.bodySmall?.copyWith(color: colorScheme.error),
-                                  contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                                ),
-                                style: textTheme.bodyLarge?.copyWith(color: colorScheme.onSurface),
-                                validator: (value) {
-                                  if (value == null || value.trim().isEmpty) {
-                                    return 'Veuillez entrer le prix';
-                                  }
-                                  final parsedPrice = double.tryParse(value.trim());
-                                  if (parsedPrice == null) {
-                                    return 'Veuillez entrer un nombre valide';
-                                  }
-                                  if (parsedPrice < 0) {
-                                    return 'Le prix ne peut pas être négatif';
-                                  }
-                                  return null;
-                                },
-                              ),
+                            IconButton(
+                              icon: Icon(Icons.close, color: colorScheme.onSurface.withOpacity(0.6)),
+                              onPressed: () => Navigator.pop(context),
                             ),
-                            const SizedBox(height: 16),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: colorScheme.surfaceVariant.withOpacity(0.05),
-                                borderRadius: BorderRadius.circular(16),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: colorScheme.onSurface.withOpacity(0.1),
-                                    blurRadius: 8,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: TextFormField(
-                                controller: _stockController,
-                                keyboardType: TextInputType.number,
-                                decoration: InputDecoration(
-                                  labelText: 'Quantité en stock',
-                                  hintText: 'Ex: 10',
-                                  prefixIcon: Icon(Icons.inventory_2_outlined, color: colorScheme.primary),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(16),
-                                    borderSide: BorderSide.none,
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(16),
-                                    borderSide: BorderSide(color: colorScheme.primary, width: 2),
-                                  ),
-                                  errorStyle: textTheme.bodySmall?.copyWith(color: colorScheme.error),
-                                  contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                                ),
-                                style: textTheme.bodyLarge?.copyWith(color: colorScheme.onSurface),
-                                validator: (value) {
-                                  if (value == null || value.trim().isEmpty) {
-                                    return 'Veuillez entrer la quantité en stock';
-                                  }
-                                  final parsedStock = int.tryParse(value.trim());
-                                  if (parsedStock == null) {
-                                    return 'Veuillez entrer un nombre entier valide';
-                                  }
-                                  if (parsedStock < 0) {
-                                    return 'La quantité ne peut pas être négative';
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: colorScheme.surfaceVariant.withOpacity(0.05),
-                                borderRadius: BorderRadius.circular(16),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: colorScheme.onSurface.withOpacity(0.1),
-                                    blurRadius: 8,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: DropdownButtonFormField<String>(
-                                value: _selectedStatus,
-                                decoration: InputDecoration(
-                                  labelText: 'Statut du stock',
-                                  prefixIcon: Icon(Icons.trending_up, color: colorScheme.primary),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(16),
-                                    borderSide: BorderSide.none,
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(16),
-                                    borderSide: BorderSide(color: colorScheme.primary, width: 2),
-                                  ),
-                                  contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                                ),
-                                style: textTheme.bodyLarge?.copyWith(color: colorScheme.onSurface),
-                                items: const [
-                                  DropdownMenuItem(value: 'stable', child: Text('Stable')),
-                                  DropdownMenuItem(value: 'increase', child: Text('Augmentation')),
-                                  DropdownMenuItem(value: 'decrease', child: Text('Diminution')),
-                                ],
-                                onChanged: (String? newValue) {
-                                  if (newValue != null) {
-                                    setModalState(() {
-                                      _selectedStatus = newValue;
-                                    });
-                                  }
-                                },
-                                dropdownColor: colorScheme.surface,
-                                icon: Icon(Icons.arrow_drop_down, color: colorScheme.primary),
-                              ),
-                            ),
-                            const SizedBox(height: 24),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                GestureDetector(
-                                  onTapDown: (_) => _animationController?.forward(),
-                                  onTapUp: (_) => _animationController?.reverse(),
-                                  child: TextButton(
-                                    onPressed: () => _animationController?.reverse().then((_) => Navigator.pop(context)),
-                                    style: TextButton.styleFrom(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-                                      foregroundColor: colorScheme.onSurface.withOpacity(0.7),
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                    ),
-                                    child: Text(
-                                      'Annuler',
-                                      style: textTheme.labelLarge?.copyWith(
-                                        color: colorScheme.onSurface.withOpacity(0.7),
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                GestureDetector(
-                                  onTapDown: (_) => _animationController?.forward(),
-                                  onTapUp: (_) => _animationController?.reverse(),
-                                  child: ElevatedButton(
-                                    onPressed: () async {
-                                      if (_formKey.currentState?.validate() ?? false) {
-                                        final newProduct = StockProduct(
-                                          name: _nameController.text.trim(),
-                                          price: double.parse(_priceController.text.trim()),
-                                          stock: int.parse(_stockController.text.trim()),
-                                          status: _selectedStatus,
-                                        );
-                                        try {
-                                          if (isEditing && id != null) {
-                                            await _firestore
-                                                .collection('stock')
-                                                .doc(id)
-                                                .set(newProduct.toFirestore());
-                                            _showSnackBar(
-                                              context,
-                                              'Produit modifié avec succès !',
-                                              colorScheme.success,
-                                            );
-                                          } else {
-                                            await _firestore
-                                                .collection('stock')
-                                                .add(newProduct.toFirestore());
-                                            _showSnackBar(
-                                              context,
-                                              'Produit ajouté avec succès !',
-                                              colorScheme.success,
-                                            );
-                                          }
-                                          _animationController?.reverse().then((_) => Navigator.pop(context));
-                                          _nameController.clear();
-                                          _priceController.clear();
-                                          _stockController.clear();
-                                        } catch (e) {
-                                          _showSnackBar(
-                                            context,
-                                            'Erreur : $e',
-                                            colorScheme.error,
-                                          );
-                                        }
-                                      }
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                                      backgroundColor: colorScheme.primary,
-                                      foregroundColor: colorScheme.onPrimary,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      elevation: 4,
-                                      shadowColor: colorScheme.primary.withOpacity(0.3),
-                                    ),
-                                    child: Text(
-                                      isEditing ? 'Modifier' : 'Ajouter',
-                                      style: textTheme.labelLarge?.copyWith(
-                                        color: colorScheme.onPrimary,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 16),
                           ],
                         ),
-                      ),
+                        const SizedBox(height: 24),
+                        TextFormField(
+                          controller: _nameController,
+                          decoration: InputDecoration(
+                            labelText: 'Nom du produit',
+                            hintText: 'Ex: Smartphone X',
+                            prefixIcon: Icon(Icons.shopping_bag_outlined, color: colorScheme.primary),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide.none,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(color: colorScheme.primary, width: 2),
+                            ),
+                            filled: true,
+                            fillColor: colorScheme.surfaceVariant.withOpacity(0.1),
+                            errorStyle: textTheme.bodySmall?.copyWith(color: colorScheme.error),
+                            contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                          ),
+                          style: textTheme.bodyLarge?.copyWith(color: colorScheme.onSurface),
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return 'Veuillez entrer le nom du produit';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          controller: _priceController,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            labelText: 'Prix (DT)',
+                            hintText: 'Ex: 99.99',
+                            prefixIcon: Icon(Icons.monetization_on_outlined, color: colorScheme.primary),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide.none,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(color: colorScheme.primary, width: 2),
+                            ),
+                            filled: true,
+                            fillColor: colorScheme.surfaceVariant.withOpacity(0.1),
+                            errorStyle: textTheme.bodySmall?.copyWith(color: colorScheme.error),
+                            contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                          ),
+                          style: textTheme.bodyLarge?.copyWith(color: colorScheme.onSurface),
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return 'Veuillez entrer le prix';
+                            }
+                            final parsedPrice = double.tryParse(value.trim());
+                            if (parsedPrice == null) {
+                              return 'Veuillez entrer un nombre valide';
+                            }
+                            if (parsedPrice < 0) {
+                              return 'Le prix ne peut pas être négatif';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          controller: _stockController,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            labelText: 'Quantité en stock',
+                            hintText: 'Ex: 10',
+                            prefixIcon: Icon(Icons.inventory_2_outlined, color: colorScheme.primary),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide.none,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(color: colorScheme.primary, width: 2),
+                            ),
+                            filled: true,
+                            fillColor: colorScheme.surfaceVariant.withOpacity(0.1),
+                            errorStyle: textTheme.bodySmall?.copyWith(color: colorScheme.error),
+                            contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                          ),
+                          style: textTheme.bodyLarge?.copyWith(color: colorScheme.onSurface),
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return 'Veuillez entrer la quantité en stock';
+                            }
+                            final parsedStock = int.tryParse(value.trim());
+                            if (parsedStock == null) {
+                              return 'Veuillez entrer un nombre entier valide';
+                            }
+                            if (parsedStock < 0) {
+                              return 'La quantité ne peut pas être négative';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        DropdownButtonFormField<String>(
+                          value: _selectedStatus,
+                          decoration: InputDecoration(
+                            labelText: 'Statut du stock',
+                            prefixIcon: Icon(Icons.trending_up, color: colorScheme.primary),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide.none,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(color: colorScheme.primary, width: 2),
+                            ),
+                            filled: true,
+                            fillColor: colorScheme.surfaceVariant.withOpacity(0.1),
+                            contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                          ),
+                          style: textTheme.bodyLarge?.copyWith(color: colorScheme.onSurface),
+                          items: const [
+                            DropdownMenuItem(value: 'stable', child: Text('Stable')),
+                            DropdownMenuItem(value: 'increase', child: Text('Augmentation')),
+                            DropdownMenuItem(value: 'decrease', child: Text('Diminution')),
+                          ],
+                          onChanged: (String? newValue) {
+                            if (newValue != null) {
+                              setModalState(() {
+                                _selectedStatus = newValue;
+                              });
+                            }
+                          },
+                          dropdownColor: colorScheme.surface,
+                          icon: Icon(Icons.arrow_drop_down, color: colorScheme.primary),
+                        ),
+                        const SizedBox(height: 24),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              style: TextButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                                foregroundColor: colorScheme.onSurface.withOpacity(0.7),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                              ),
+                              child: Text(
+                                'Annuler',
+                                style: textTheme.labelLarge?.copyWith(
+                                  color: colorScheme.onSurface.withOpacity(0.7),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            ElevatedButton(
+                              onPressed: () async {
+                                if (_formKey.currentState?.validate() ?? false) {
+                                  final newProduct = StockProduct(
+                                    name: _nameController.text.trim(),
+                                    price: double.parse(_priceController.text.trim()),
+                                    stock: int.parse(_stockController.text.trim()),
+                                    status: _selectedStatus,
+                                  );
+                                  try {
+                                    if (isEditing && id != null) {
+                                      await _firestore
+                                          .collection('stock')
+                                          .doc(id)
+                                          .set(newProduct.toFirestore());
+                                      _showSnackBar(
+                                        context,
+                                        'Produit modifié avec succès !',
+                                        colorScheme.success,
+                                      );
+                                    } else {
+                                      await _firestore
+                                          .collection('stock')
+                                          .add(newProduct.toFirestore());
+                                      _showSnackBar(
+                                        context,
+                                        'Produit ajouté avec succès !',
+                                        colorScheme.success,
+                                      );
+                                    }
+                                    Navigator.pop(context);
+                                    _nameController.clear();
+                                    _priceController.clear();
+                                    _stockController.clear();
+                                  } catch (e) {
+                                    _showSnackBar(
+                                      context,
+                                      'Erreur : $e',
+                                      colorScheme.error,
+                                    );
+                                  }
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                                backgroundColor: colorScheme.primary,
+                                foregroundColor: colorScheme.onPrimary,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                elevation: 4,
+                                shadowColor: colorScheme.primary.withOpacity(0.3),
+                              ),
+                              child: Text(
+                                isEditing ? 'Modifier' : 'Ajouter',
+                                style: textTheme.labelLarge?.copyWith(
+                                  color: colorScheme.onPrimary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                      ],
                     ),
-                  );
-                },
-              ),
-            ),
+                  ),
+                ),
+              );
+            },
           ),
         );
       },
     );
   }
-
 
   Future<void> _deleteProduct(String id) async {
     try {
@@ -1204,7 +1119,6 @@ class _StockManagementScreenState extends State<StockManagementScreen>
     }
   }
 
-
   Stream<List<StockProduct>> _getProductsStream() {
     return _firestore
         .collection('stock')
@@ -1213,7 +1127,6 @@ class _StockManagementScreenState extends State<StockManagementScreen>
             .map((doc) => StockProduct.fromFirestore(doc.data(), doc.id))
             .toList());
   }
-
 
   List<StockProduct> _filterProducts(List<StockProduct> products) {
     if (_searchQuery.isEmpty) {
@@ -1232,9 +1145,14 @@ class _StockManagementScreenState extends State<StockManagementScreen>
     return Scaffold(
       backgroundColor: colorScheme.background,
       appBar: AppBar(
-        title: const Text('Gestion du Stock'),
+        title: Text(
+          'Gestion du Stock',
+          style: textTheme.titleLarge?.copyWith(color: colorScheme.onPrimary),
+        ),
+        backgroundColor: colorScheme.primary,
+        elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back, color: colorScheme.onPrimary),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -1245,7 +1163,10 @@ class _StockManagementScreenState extends State<StockManagementScreen>
             padding: const EdgeInsets.all(16.0),
             child: Text(
               'Vue d\'ensemble du stock',
-              style: textTheme.headlineSmall?.copyWith(color: colorScheme.onBackground),
+              style: textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: colorScheme.onSurface,
+              ),
             ),
           ),
           Padding(
@@ -1255,10 +1176,10 @@ class _StockManagementScreenState extends State<StockManagementScreen>
               decoration: InputDecoration(
                 labelText: 'Rechercher un produit',
                 hintText: 'Entrez le nom du produit',
-                prefixIcon: const Icon(Icons.search),
+                prefixIcon: Icon(Icons.search, color: colorScheme.primary),
                 suffixIcon: _searchQuery.isNotEmpty
                     ? IconButton(
-                        icon: const Icon(Icons.clear),
+                        icon: Icon(Icons.clear, color: colorScheme.primary),
                         onPressed: () {
                           _searchController.clear();
                           setState(() {
@@ -1271,10 +1192,15 @@ class _StockManagementScreenState extends State<StockManagementScreen>
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
                 ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: colorScheme.primary, width: 2),
+                ),
                 filled: true,
-                fillColor: colorScheme.surface,
+                fillColor: colorScheme.surfaceVariant.withOpacity(0.1),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               ),
+              style: textTheme.bodyLarge?.copyWith(color: colorScheme.onSurface),
             ),
           ),
           Expanded(
@@ -1304,24 +1230,23 @@ class _StockManagementScreenState extends State<StockManagementScreen>
                               'assets/images/inventory_empty.png',
                               width: 80,
                               height: 80,
-                              color: colorScheme.onBackground.withOpacity(0.6),
+                              color: colorScheme.onSurface.withOpacity(0.6),
                               colorBlendMode: BlendMode.modulate,
                             ),
                             const SizedBox(height: 20),
                             Text(
                               _searchQuery.isEmpty ? 'Le stock est vide.' : 'Aucun produit trouvé.',
-                              style: textTheme.headlineSmall?.copyWith(
-                                color: colorScheme.onBackground.withOpacity(0.8),
+                              style: textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: colorScheme.onSurface,
                               ),
-                              textAlign: TextAlign.center,
                             ),
                             const SizedBox(height: 10),
                             Text(
                               _searchQuery.isEmpty ? 'Ajoutez des produits pour commencer !' : 'Vérifiez votre recherche ou ajoutez un nouveau produit.',
-                              style: textTheme.bodyMedium?.copyWith(
-                                color: colorScheme.onBackground.withOpacity(0.6),
+                              style: textTheme.bodyLarge?.copyWith(
+                                color: colorScheme.onSurface.withOpacity(0.6),
                               ),
-                              textAlign: TextAlign.center,
                             ),
                           ],
                         ),
@@ -1336,17 +1261,17 @@ class _StockManagementScreenState extends State<StockManagementScreen>
 
                           switch (product.status) {
                             case 'increase':
-                              statusColor = const Color(0xFFFF4081); 
+                              statusColor = const Color(0xFFFF4081);
                               statusImage = 'assets/images/augmenter.png';
                               statusText = 'Augmentation';
                               break;
                             case 'decrease':
-                              statusColor = const Color(0xFF757575); 
+                              statusColor = const Color(0xFF757575);
                               statusImage = 'assets/images/diminution.png';
                               statusText = 'Diminution';
                               break;
                             default:
-                              statusColor = const Color(0xFF4CAF50); 
+                              statusColor = const Color(0xFF4CAF50);
                               statusImage = 'assets/images/equilibre (1).png';
                               statusText = 'Stable';
                           }
@@ -1355,6 +1280,7 @@ class _StockManagementScreenState extends State<StockManagementScreen>
                             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                             elevation: 4,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            color: colorScheme.surface,
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: Row(
@@ -1365,7 +1291,10 @@ class _StockManagementScreenState extends State<StockManagementScreen>
                                       children: [
                                         Text(
                                           product.name,
-                                          style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                                          style: textTheme.titleMedium?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: colorScheme.onSurface,
+                                          ),
                                         ),
                                         const SizedBox(height: 8),
                                         RichText(
@@ -1374,14 +1303,14 @@ class _StockManagementScreenState extends State<StockManagementScreen>
                                               TextSpan(
                                                 text: 'Prix: ',
                                                 style: textTheme.bodyMedium?.copyWith(
-                                                  color: const Color(0xFF757575),
+                                                  color: colorScheme.onSurface.withOpacity(0.7),
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
                                               TextSpan(
                                                 text: '${product.price.toStringAsFixed(2)} DZD',
                                                 style: textTheme.bodyMedium?.copyWith(
-                                                  color: colorScheme.onSurface.withOpacity(0.7),
+                                                  color: colorScheme.onSurface,
                                                 ),
                                               ),
                                             ],
@@ -1393,14 +1322,14 @@ class _StockManagementScreenState extends State<StockManagementScreen>
                                               TextSpan(
                                                 text: 'Stock: ',
                                                 style: textTheme.bodyMedium?.copyWith(
-                                                  color: const Color(0xFF757575),
+                                                  color: colorScheme.onSurface.withOpacity(0.7),
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
                                               TextSpan(
                                                 text: '${product.stock}',
                                                 style: textTheme.bodyMedium?.copyWith(
-                                                  color: colorScheme.onSurface.withOpacity(0.7),
+                                                  color: colorScheme.onSurface,
                                                 ),
                                               ),
                                             ],
@@ -1431,18 +1360,18 @@ class _StockManagementScreenState extends State<StockManagementScreen>
                                   ),
                                   const SizedBox(width: 16),
                                   IconButton(
-                                    icon: Icon(Icons.edit, color: colorScheme.secondary),
+                                    icon: Icon(Icons.edit, color: Colors.yellow),
                                     tooltip: 'Modifier le stock',
                                     onPressed: () {
-                                      final docId = products.firstWhere((p) => p.name == product.name).name; 
+                                      final docId = snapshot.data![index].name;
                                       _showProductDialog(product: product, id: docId);
                                     },
                                   ),
                                   IconButton(
-                                    icon: const Icon(Icons.delete_outline, color: AppColors.primary),
+                                    icon: Icon(Icons.delete_outline, color: AppColors.primary),
                                     tooltip: 'Supprimer',
                                     onPressed: () {
-                                      final docId = products.firstWhere((p) => p.name == product.name).name; 
+                                      final docId = snapshot.data![index].name;
                                       _deleteProduct(docId);
                                     },
                                   ),
@@ -1459,13 +1388,17 @@ class _StockManagementScreenState extends State<StockManagementScreen>
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showProductDialog(),
-        icon: const Icon(Icons.add),
-        label: const Text('Ajouter Produit'),
+        icon: Icon(Icons.add, color: colorScheme.onPrimary),
+        label: Text(
+          'Ajouter Produit',
+          style: textTheme.labelLarge?.copyWith(color: colorScheme.onPrimary),
+        ),
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-       bottomNavigationBar: const CustomCurvedNavigationBar(), 
+      bottomNavigationBar: const CustomCurvedNavigationBar(),
     );
   }
 }

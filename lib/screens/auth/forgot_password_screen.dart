@@ -1,4 +1,3 @@
-
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,15 +15,45 @@ class ForgotPasswordScreen extends StatefulWidget {
   State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
-class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> with SingleTickerProviderStateMixin {
   final TextEditingController _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  String _generatedOtp = ''; 
+  String _generatedOtp = '';
 
- 
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+  late Animation<Offset> _slideAnimation;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    );
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeIn),
+    );
+    _slideAnimation = Tween<Offset>(begin: const Offset(0, 0.5), end: Offset.zero).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOut),
+    );
+    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.elasticOut),
+    );
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    _emailController.dispose();
+    super.dispose();
+  }
+
   String _generateOtp() {
     var random = Random();
-    return (random.nextInt(900000) + 100000).toString(); 
+    return (random.nextInt(900000) + 100000).toString();
   }
 
   Future<void> _sendOtp() async {
@@ -32,18 +61,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       String email = _emailController.text.trim();
       try {
         _generatedOtp = _generateOtp();
-        print('OTP généré pour $email : $_generatedOtp'); 
+        print('OTP généré pour $email : $_generatedOtp');
 
-       
         var response = await http.post(
           Uri.parse('https://api.sendgrid.com/v3/mail/send'),
           headers: {
-            'Authorization': 'Bearer YOUR_SENDGRID_API_KEY', 
+            'Authorization': 'Bearer YOUR_SENDGRID_API_KEY',
             'Content-Type': 'application/json',
           },
           body: jsonEncode({
             'personalizations': [{'to': [{'email': email}], 'subject': 'Votre code OTP'}],
-            'from': {'email': 'your-verified-email@example.com'}, 
+            'from': {'email': 'your-verified-email@example.com'},
             'content': [{'type': 'text/plain', 'value': 'Votre code OTP est : $_generatedOtp\nValable 5 minutes.'}],
           }),
         );
@@ -52,7 +80,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => OtpVerificationScreen(email: email, otp: _generatedOtp),
+              builder: (context) => OtpVerificationScreen(email: email, otp: _generatedOtp, userId: '',),
             ),
           );
           ScaffoldMessenger.of(context).showSnackBar(
@@ -122,16 +150,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 
   @override
-  void dispose() {
-    _emailController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mot de passe oublié'),
+        title: Text('Mot de passe oublié', style: textTheme.titleLarge?.copyWith(color: colorScheme.onPrimary)),
+        backgroundColor: colorScheme.primary,
+        elevation: 0,
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -141,42 +168,56 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  'assets/images/image.png',
-                  height: 100,
+                FadeTransition(
+                  opacity: _fadeAnimation,
+                  child: Image.asset(
+                    'assets/images/image.png',
+                    height: 100,
+                  ),
                 ),
                 const SizedBox(height: 40),
                 Text(
                   'Entrez votre email pour réinitialiser',
-                  style: AppStyles.headline3,
-                  textAlign: TextAlign.center,
+                  style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, color: colorScheme.onSurface),
                 ),
                 const SizedBox(height: 30),
-                TextFormField(
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    hintText: 'Entrez votre email',
-                    prefixIcon: Icon(Icons.email),
+                SlideTransition(
+                  position: _slideAnimation,
+                  child: TextFormField(
+                    controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      labelText: 'Email',
+                      hintText: 'Entrez votre email',
+                      prefixIcon: Icon(Icons.email, color: colorScheme.primary),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                      filled: true,
+                      fillColor: colorScheme.surfaceVariant.withOpacity(0.1),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Veuillez entrer votre email';
+                      }
+                      if (!RegExp(r'^[a-zA-Z0-9._]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$').hasMatch(value)) {
+                        return 'Veuillez entrer un email valide';
+                      }
+                      return null;
+                    },
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Veuillez entrer votre email';
-                    }
-                    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                      return 'Veuillez entrer un email valide';
-                    }
-                    return null;
-                  },
                 ),
                 const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: _sendOtp,
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 50),
+                ScaleTransition(
+                  scale: _scaleAnimation,
+                  child: ElevatedButton(
+                    onPressed: _sendOtp,
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      backgroundColor: colorScheme.primary,
+                      foregroundColor: colorScheme.onPrimary,
+                    ),
+                    child: Text('Envoyer le code OTP', style: textTheme.labelLarge?.copyWith(color: colorScheme.onPrimary)),
                   ),
-                  child: const Text('Envoyer le code OTP'),
                 ),
                 const SizedBox(height: 10),
                 TextButton(
