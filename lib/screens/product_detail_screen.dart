@@ -35,31 +35,16 @@ class ProductDetailScreen extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
               centerTitle: true,
-              background: Hero(
-                tag: product.id,
-                child: Image.network(
-                  product.imageUrl,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Center(
-                      child: CircularProgressIndicator(
-                        value: loadingProgress.expectedTotalBytes != null
-                            ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-                            : null,
-                        color: colorScheme.secondary,
-                      ),
-                    );
-                  },
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      color: colorScheme.surface,
-                      child: Icon(Icons.broken_image, size: 100, color: colorScheme.onSurface.withOpacity(0.6)),
-                    );
-                  },
-                ),
-              ),
+            background: Container(
+  height: 300,
+  decoration: BoxDecoration(
+    image: DecorationImage(
+      image: NetworkImage(product.imageUrl),
+      fit: BoxFit.cover,
+    ),
+  ),
+),
+
             ),
           ),
           SliverToBoxAdapter(

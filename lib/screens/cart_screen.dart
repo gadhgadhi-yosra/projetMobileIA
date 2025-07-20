@@ -23,7 +23,7 @@ class CartScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context); // ترجع للشاشة السابقة
+            Navigator.pop(context); 
           },
         ),
       ),
@@ -47,7 +47,7 @@ class CartScreen extends StatelessWidget {
                         const SizedBox(height: 10),
                         ElevatedButton.icon(
                           onPressed: () {
-                            // ترجع للصفحة الرئيسية (Home) بطريقة نظيفة
+                     
                             Navigator.popUntil(context, ModalRoute.withName('/home'));
                           },
                           icon: const Icon(Icons.shopping_bag),
@@ -199,7 +199,7 @@ class CartScreen extends StatelessWidget {
           ),
         ],
       ),
-       bottomNavigationBar: const CustomCurvedNavigationBar(), // Ajout de la barre de navigation
+       bottomNavigationBar: const CustomCurvedNavigationBar(), 
     );
   }
 }

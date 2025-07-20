@@ -1,3 +1,4 @@
+
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,6 +8,9 @@ import 'dart:convert';
 import 'package:supermarket_app_03072025/screens/auth/otp_verification_screen.dart';
 import 'package:supermarket_app_03072025/utils/app_styles.dart';
 import 'package:supermarket_app_03072025/widgets/color_scheme_extension.dart';
+import 'package:supermarket_app_03072025/widgets/custom_elevated_button.dart';
+import 'package:supermarket_app_03072025/widgets/custom_text_button.dart';
+import 'package:supermarket_app_03072025/widgets/custom_text_field.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -15,41 +19,10 @@ class ForgotPasswordScreen extends StatefulWidget {
   State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
-class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> with SingleTickerProviderStateMixin {
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final TextEditingController _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   String _generatedOtp = '';
-
-  late AnimationController _animationController;
-  late Animation<double> _fadeAnimation;
-  late Animation<Offset> _slideAnimation;
-  late Animation<double> _scaleAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1000),
-    );
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.easeIn),
-    );
-    _slideAnimation = Tween<Offset>(begin: const Offset(0, 0.5), end: Offset.zero).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.easeOut),
-    );
-    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.elasticOut),
-    );
-    _animationController.forward();
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    _emailController.dispose();
-    super.dispose();
-  }
 
   String _generateOtp() {
     var random = Random();
@@ -70,9 +43,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> with Single
             'Content-Type': 'application/json',
           },
           body: jsonEncode({
-            'personalizations': [{'to': [{'email': email}], 'subject': 'Votre code OTP'}],
+            'personalizations': [
+              {'to': [{'email': email}], 'subject': 'Votre code OTP'}
+            ],
             'from': {'email': 'your-verified-email@example.com'},
-            'content': [{'type': 'text/plain', 'value': 'Votre code OTP est : $_generatedOtp\nValable 5 minutes.'}],
+            'content': [
+              {
+                'type': 'text/plain',
+                'value': 'Votre code OTP est : $_generatedOtp\nValable 5 minutes.'
+              }
+            ],
           }),
         );
 
@@ -80,7 +60,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> with Single
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => OtpVerificationScreen(email: email, otp: _generatedOtp, userId: '',),
+              builder: (context) => OtpVerificationScreen(email: email, otp: _generatedOtp),
             ),
           );
           ScaffoldMessenger.of(context).showSnackBar(
@@ -150,15 +130,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> with Single
   }
 
   @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mot de passe oublié', style: textTheme.titleLarge?.copyWith(color: colorScheme.onPrimary)),
-        backgroundColor: colorScheme.primary,
-        elevation: 0,
+        title: const Text('Mot de passe oublié'),
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -168,68 +149,48 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> with Single
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                FadeTransition(
-                  opacity: _fadeAnimation,
-                  child: Image.asset(
-                    'assets/images/image.png',
-                    height: 100,
-                  ),
+                Image.asset(
+                  'assets/images/image.png',
+                  height: 100,
                 ),
                 const SizedBox(height: 40),
                 Text(
                   'Entrez votre email pour réinitialiser',
-                  style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, color: colorScheme.onSurface),
+                  style: AppStyles.headline3,
+                  textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 30),
-                SlideTransition(
-                  position: _slideAnimation,
-                  child: TextFormField(
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      labelText: 'Email',
-                      hintText: 'Entrez votre email',
-                      prefixIcon: Icon(Icons.email, color: colorScheme.primary),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                      filled: true,
-                      fillColor: colorScheme.surfaceVariant.withOpacity(0.1),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Veuillez entrer votre email';
-                      }
-                      if (!RegExp(r'^[a-zA-Z0-9._]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$').hasMatch(value)) {
-                        return 'Veuillez entrer un email valide';
-                      }
-                      return null;
-                    },
-                  ),
+                CustomTextField(
+                  controller: _emailController,
+                  label: 'Email',
+                  icon: Icons.email,
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Veuillez entrer votre email';
+                    }
+                    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                      return 'Veuillez entrer un email valide';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 20),
-                ScaleTransition(
-                  scale: _scaleAnimation,
-                  child: ElevatedButton(
-                    onPressed: _sendOtp,
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(double.infinity, 50),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      backgroundColor: colorScheme.primary,
-                      foregroundColor: colorScheme.onPrimary,
-                    ),
-                    child: Text('Envoyer le code OTP', style: textTheme.labelLarge?.copyWith(color: colorScheme.onPrimary)),
-                  ),
+                CustomElevatedButton(
+                  onPressed: _sendOtp,
+                  text: 'Envoyer le code OTP',
                 ),
                 const SizedBox(height: 10),
-                TextButton(
+                CustomTextButton(
                   onPressed: _sendResetLink,
-                  child: Text('Envoyer un lien de réinitialisation', style: AppStyles.linkTextStyle),
+                  text: 'Envoyer un lien de réinitialisation',
                 ),
                 const SizedBox(height: 20),
-                TextButton(
+                CustomTextButton(
                   onPressed: () {
                     Navigator.pushReplacementNamed(context, '/login');
                   },
-                  child: Text('Retour à la connexion', style: AppStyles.linkTextStyle),
+                  text: 'Retour à la connexion',
                 ),
               ],
             ),

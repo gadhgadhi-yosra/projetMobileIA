@@ -6,7 +6,7 @@ import 'app_colors.dart';
 class AppTheme {
   static ThemeData get darkTheme {
     return ThemeData(
-      brightness: Brightness.light, // Changed to light for background #F5F5F5
+      brightness: Brightness.light, 
       primaryColor: AppColors.primary,
       scaffoldBackgroundColor: AppColors.background,
       cardColor: AppColors.cardColor,

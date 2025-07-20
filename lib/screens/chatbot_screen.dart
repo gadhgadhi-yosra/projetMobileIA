@@ -446,7 +446,6 @@ import 'package:intl/intl.dart';
 import 'package:supermarket_app_03072025/widgets/chatbot_message.dart';
 import 'package:supermarket_app_03072025/widgets/custom_curved_navigation_bar.dart';
 
-
 class ChatbotScreen extends StatefulWidget {
   const ChatbotScreen({Key? key}) : super(key: key);
 
@@ -505,7 +504,6 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
     _controller.clear();
     _addUserMessage(text);
 
-    // Exemple: ici on demande le prix à l'utilisateur dans un dialogue simple (pour demo)
     double? yourPrice = await _askForPrice(context);
     if (yourPrice == null) {
       _addBotMessage("Veuillez fournir un prix valide pour le produit.");
@@ -515,7 +513,6 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
     _addBotMessage("Recherche des prix concurrents pour \"$text\" ...");
 
     try {
-      // Remplace par l'URL de ton backend FastAPI
       const backendUrl = "http://127.0.0.1:8000/compare_price";
 
       final response = await http.post(
@@ -524,7 +521,6 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
         body: jsonEncode({
           "product_name": text,
           "your_price": yourPrice,
-          // tu peux ajouter "competitors": ["Géant", "Aziza", "Jumia"] ou laisser vide pour tous
         }),
       );
 
@@ -550,7 +546,6 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
     }
   }
 
-  // Dialogue simple pour demander le prix au user
   Future<double?> _askForPrice(BuildContext context) async {
     final priceController = TextEditingController();
     double? result;
@@ -673,7 +668,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: const CustomCurvedNavigationBar(), // Ajout de la barre de navigation
+      bottomNavigationBar: const CustomCurvedNavigationBar(),
     );
   }
 }

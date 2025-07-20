@@ -1,5 +1,5 @@
 class StockProduct {
-  final String id; // <- à ajouter
+  final String id; 
   final String name;
   final double price;
   final int stock;
@@ -15,7 +15,7 @@ class StockProduct {
 
   factory StockProduct.fromFirestore(Map<String, dynamic> data, String id) {
     return StockProduct(
-      id: id, // <- important !
+      id: id, 
       name: data['name'] ?? '',
       price: (data['price'] ?? 0.0).toDouble(),
       stock: (data['stock'] ?? 0).toInt(),
