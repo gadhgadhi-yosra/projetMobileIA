@@ -13,7 +13,7 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productProvider = Provider.of<ProductProvider>(context);
-    final currencyFormatter = NumberFormat.currency(locale: 'fr_FR', symbol: '€');
+    final currencyFormatter = NumberFormat.currency(locale: 'fr_FR', symbol: 'DT');
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 

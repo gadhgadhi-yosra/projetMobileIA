@@ -15,7 +15,7 @@ class ProductDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final product = ModalRoute.of(context)!.settings.arguments as Product;
     final productProvider = Provider.of<ProductProvider>(context, listen: false);
-    final currencyFormatter = NumberFormat.currency(locale: 'fr_FR', symbol: '€');
+    final currencyFormatter = NumberFormat.currency(locale: 'fr_FR', symbol: 'DT');
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
