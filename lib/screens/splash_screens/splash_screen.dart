@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:supermarket_app_03072025/onboarding_screen.dart';
+import 'package:supermarket_app_03072025/screens/onboarding_screen.dart';
 import 'package:supermarket_app_03072025/utils/app_colors.dart';
 
 class SplashScreen extends StatelessWidget {

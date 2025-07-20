@@ -24,7 +24,7 @@ class CustomTextField extends StatelessWidget {
     this.slideAnimation,
     this.onChanged,
     this.maxLength,
-    this.textAlign = TextAlign.start,
+    this.textAlign = TextAlign.start, IconButton? suffixIcon,
   });
 
   @override
