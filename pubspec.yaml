@@ -26,6 +26,11 @@ dependencies:
   http: ^1.2.0
   cloud_firestore: ^4.9.2
   mailer: ^6.0.0
+  image_picker: ^1.0.0
+  firebase_storage: ^11.0.0
+  # google_sign_in: ^6.2.1
+  curved_navigation_bar: ^1.0.6 
+
   
 
 dev_dependencies:
@@ -40,6 +45,7 @@ flutter:
     - assets/
     - assets/animations/
     - assets/images/
+   
   
     
   

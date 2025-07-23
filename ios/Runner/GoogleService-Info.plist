@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.exemplPr</string>
+	<string>IDEDidComputeMac32BitWarning</string>
 	<key>PROJECT_ID</key>
 	<string>navin-supermarkett</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:332283503136:ios:e1b7b302e49194076f1245</string>
+	<string>1:332283503136:ios:c5cbac0093ed37ef6f1245</string>
 </dict>
 </plist>

@@ -1,25 +1,37 @@
 
-
 import 'package:flutter/material.dart';
+
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  final List<Widget>? actions;
-  final Widget? leading;
+  final IconData? leading;
+  final VoidCallback? onLeadingPressed;
 
   const CustomAppBar({
-    Key? key,
+    super.key,
     required this.title,
-    this.actions,
     this.leading,
-  }) : super(key: key);
+    this.onLeadingPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return AppBar(
-      title: Text(title),
-      actions: actions,
-      leading: leading,
+      title: Text(
+        title,
+        style: textTheme.titleLarge?.copyWith(color: colorScheme.onPrimary),
+      ),
+      backgroundColor: colorScheme.primary,
+      elevation: 0,
+      leading: leading != null
+          ? IconButton(
+              icon: Icon(leading, color: colorScheme.onPrimary),
+              onPressed: onLeadingPressed ?? () => Navigator.pop(context),
+            )
+          : null,
     );
   }
 

@@ -8,6 +8,9 @@ import 'dart:convert';
 import 'package:supermarket_app_03072025/screens/auth/otp_verification_screen.dart';
 import 'package:supermarket_app_03072025/utils/app_styles.dart';
 import 'package:supermarket_app_03072025/widgets/color_scheme_extension.dart';
+import 'package:supermarket_app_03072025/widgets/custom_elevated_button.dart';
+import 'package:supermarket_app_03072025/widgets/custom_text_button.dart';
+import 'package:supermarket_app_03072025/widgets/custom_text_field.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -19,12 +22,11 @@ class ForgotPasswordScreen extends StatefulWidget {
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final TextEditingController _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  String _generatedOtp = ''; 
+  String _generatedOtp = '';
 
- 
   String _generateOtp() {
     var random = Random();
-    return (random.nextInt(900000) + 100000).toString(); 
+    return (random.nextInt(900000) + 100000).toString();
   }
 
   Future<void> _sendOtp() async {
@@ -32,19 +34,25 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       String email = _emailController.text.trim();
       try {
         _generatedOtp = _generateOtp();
-        print('OTP généré pour $email : $_generatedOtp'); 
+        print('OTP généré pour $email : $_generatedOtp');
 
-       
         var response = await http.post(
           Uri.parse('https://api.sendgrid.com/v3/mail/send'),
           headers: {
-            'Authorization': 'Bearer YOUR_SENDGRID_API_KEY', 
+            'Authorization': 'Bearer YOUR_SENDGRID_API_KEY',
             'Content-Type': 'application/json',
           },
           body: jsonEncode({
-            'personalizations': [{'to': [{'email': email}], 'subject': 'Votre code OTP'}],
-            'from': {'email': 'your-verified-email@example.com'}, 
-            'content': [{'type': 'text/plain', 'value': 'Votre code OTP est : $_generatedOtp\nValable 5 minutes.'}],
+            'personalizations': [
+              {'to': [{'email': email}], 'subject': 'Votre code OTP'}
+            ],
+            'from': {'email': 'your-verified-email@example.com'},
+            'content': [
+              {
+                'type': 'text/plain',
+                'value': 'Votre code OTP est : $_generatedOtp\nValable 5 minutes.'
+              }
+            ],
           }),
         );
 
@@ -152,14 +160,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 30),
-                TextFormField(
+                CustomTextField(
                   controller: _emailController,
+                  label: 'Email',
+                  icon: Icons.email,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    hintText: 'Entrez votre email',
-                    prefixIcon: Icon(Icons.email),
-                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Veuillez entrer votre email';
@@ -171,24 +176,21 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   },
                 ),
                 const SizedBox(height: 20),
-                ElevatedButton(
+                CustomElevatedButton(
                   onPressed: _sendOtp,
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 50),
-                  ),
-                  child: const Text('Envoyer le code OTP'),
+                  text: 'Envoyer le code OTP',
                 ),
                 const SizedBox(height: 10),
-                TextButton(
+                CustomTextButton(
                   onPressed: _sendResetLink,
-                  child: Text('Envoyer un lien de réinitialisation', style: AppStyles.linkTextStyle),
+                  text: 'Envoyer un lien de réinitialisation',
                 ),
                 const SizedBox(height: 20),
-                TextButton(
+                CustomTextButton(
                   onPressed: () {
                     Navigator.pushReplacementNamed(context, '/login');
                   },
-                  child: Text('Retour à la connexion', style: AppStyles.linkTextStyle),
+                  text: 'Retour à la connexion',
                 ),
               ],
             ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import 'utils/app_styles.dart';
-
+import 'package:supermarket_app_03072025/utils/app_styles.dart';
+import 'package:supermarket_app_03072025/widgets/custom_elevated_button.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({Key? key}) : super(key: key);
@@ -33,12 +32,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       'description': 'Suivez vos produits en temps réel et optimisez \n vos inventaires.',
     },
     {
-      'image': 'assets/images/onboarding2.png',
+      'image': 'assets/images/onboarding1.png',
       'title': 'Comparez les prix des concurrents',
       'description': 'Notre IA recherche les meilleurs prix pour \n vous aider à rester compétitif.',
     },
     {
-      'image': 'assets/images/onboarding3.png',
+      'image': 'assets/images/onboarding1.png',
       'title': 'Prenez des décisions éclairées',
       'description': 'Baissez, augmentez ou maintenez vos prix grâce à nos \n recommandations intelligentes.',
     },
@@ -107,7 +106,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 ),
               ),
               Positioned(
-                bottom: screenHeight * 0.23, 
+                bottom: screenHeight * 0.23,
                 width: screenWidth,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -123,9 +122,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 right: 0,
                 child: Container(
                   margin: EdgeInsets.all(screenWidth * 0.1),
-                  height: 50,
-                  width: double.infinity,
-                  child: ElevatedButton(
+                  child: CustomElevatedButton(
                     onPressed: () {
                       if (currentIndex == dataList.length - 1) {
                         Navigator.pushReplacementNamed(context, '/login');
@@ -136,19 +133,14 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         );
                       }
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: colorScheme.primary,
-                      foregroundColor: colorScheme.onPrimary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: Text(
-                      currentIndex == dataList.length - 1 ? 'Commencer' : 'Suivant',
-                      style: AppStyles.bodyText1.copyWith(
-                        color: colorScheme.onPrimary,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    text: currentIndex == dataList.length - 1 ? 'Commencer' : 'Suivant',
+                    height: 50,
+                    borderRadius: BorderRadius.circular(10),
+                    backgroundColor: colorScheme.primary,
+                    foregroundColor: colorScheme.onPrimary,
+                    textStyle: AppStyles.bodyText1.copyWith(
+                      color: colorScheme.onPrimary,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
