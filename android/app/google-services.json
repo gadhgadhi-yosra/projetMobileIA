@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "332283503136",
-    "project_id": "navin-supermarkett",
-    "storage_bucket": "navin-supermarkett.firebasestorage.app"
+    "project_number": "96167137155",
+    "project_id": "projetmobileia",
+    "storage_bucket": "projetmobileia.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:332283503136:android:e9ec080e1f9f48fd6f1245",
+        "mobilesdk_app_id": "1:96167137155:android:0fb55d2c0c3dae8f0d70b6",
         "android_client_info": {
-          "package_name": "com.example.exempl_pr"
+          "package_name": "com.example.first_flutter"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDfJINkkKJmx1zA862RwiJcP9ZVJ7LfGU4"
+          "current_key": "AIzaSyB1LYAeysFOLhXY-M7mOw17c7Yy0thDHWg"
         }
       ],
       "services": {

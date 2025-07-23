@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
+import 'package:supermarket_app_03072025/firebase_options.dart';
 import 'package:supermarket_app_03072025/profile/profile_screen.dart';
 import 'package:supermarket_app_03072025/providers/product_provider.dart';
 import 'package:supermarket_app_03072025/screens/auth/forgot_password_screen.dart';
@@ -18,7 +19,11 @@ import 'package:supermarket_app_03072025/utils/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(); // 🔥 Initialiser Firebase
+  await Firebase.initializeApp(
+ 
+ options: DefaultFirebaseOptions.currentPlatform
+
+  ); // 🔥 Initialiser Firebase
   runApp(const MyApp());
 }
 
