@@ -2,19 +2,20 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
+
 import 'package:supermarket_app_03072025/providers/navigation_provider.dart';
 import 'package:supermarket_app_03072025/providers/product_provider.dart';
 import 'package:supermarket_app_03072025/screens/auth/forgot_password_screen.dart';
 import 'package:supermarket_app_03072025/screens/auth/login_screen.dart';
 import 'package:supermarket_app_03072025/screens/auth/profile_screen.dart';
 import 'package:supermarket_app_03072025/screens/auth/register_screen.dart' ;
-import 'package:supermarket_app_03072025/screens/cart_screen.dart';
 import 'package:supermarket_app_03072025/screens/chatbot_screen.dart';
 import 'package:supermarket_app_03072025/screens/employees/employee_management_screen.dart';
 import 'package:supermarket_app_03072025/screens/home_screen.dart';
 import 'package:supermarket_app_03072025/screens/product_detail_screen.dart';
 import 'package:supermarket_app_03072025/screens/splash_screens/splash_screen.dart';
 import 'package:supermarket_app_03072025/screens/stock/stock_management_screen.dart';
+
 import 'package:supermarket_app_03072025/utils/app_theme.dart';
 
 
@@ -40,8 +41,6 @@ class MyApp extends StatelessWidget {
         home: const SplashScreen(),
         routes: {
           '/home': (context) => const HomeScreen(),
-          '/product-detail': (context) => const ProductDetailScreen(),
-          '/cart': (context) => const CartScreen(),
           '/chatbot': (context) => const ChatbotScreen(),
           '/login': (context) => const LoginScreen(),
           '/register': (context) => const RegisterScreen(),

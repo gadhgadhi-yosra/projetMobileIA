@@ -17,7 +17,7 @@ class Employee {
     this.tenant,
   });
 
-  factory Employee.fromFirestore(Map<String, dynamic> data, String id) {
+  factory Employee.fromFirestore(Map<String, dynamic> data, String id) { //Convertit les données venant de Firestore en objet Employee
     return Employee(
         id: id,
         name: data['name'] ?? '',
@@ -28,7 +28,7 @@ class Employee {
       );
   }
 
-  Map<String, dynamic> toFirestore() {
+  Map<String, dynamic> toFirestore() { //enregistrer dans Firestore
     return {
       'name': name,
       'role': role,

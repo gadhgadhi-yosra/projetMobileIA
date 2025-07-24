@@ -3,7 +3,6 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:supermarket_app_03072025/providers/navigation_provider.dart';
 import 'package:supermarket_app_03072025/screens/auth/profile_screen.dart';
-import 'package:supermarket_app_03072025/screens/cart_screen.dart';
 import 'package:supermarket_app_03072025/screens/chatbot_screen.dart';
 import 'package:supermarket_app_03072025/screens/employees/employee_management_screen.dart';
 import 'package:supermarket_app_03072025/screens/home_screen.dart';
@@ -31,18 +30,15 @@ class CustomCurvedNavigationBar extends StatelessWidget {
               page = const HomeScreen();
               break;
             case 1:
-              page = const CartScreen();
-              break;
-            case 2:
               page = const ChatbotScreen();
               break;
-            case 3:
+            case 2:
               page = const EmployeeManagementScreen();
               break;
-            case 4:
+            case 3:
               page = const StockManagementScreen();
               break;
-            case 5:
+            case 4:
               page = const ProfileScreen();
               break;
             default:
@@ -83,7 +79,6 @@ class CustomCurvedNavigationBar extends StatelessWidget {
       index: navigationProvider.selectedIndex,
       items: <Widget>[
         Image.asset('assets/images/accueil.png', width: 30, height: 30, color: navigationProvider.selectedIndex == 0 ? Colors.white : colorScheme.onPrimary),
-        Image.asset('assets/images/sac-de-courses.png', width: 30, height: 30, color: navigationProvider.selectedIndex == 1 ? Colors.white : colorScheme.onPrimary),
         Image.asset('assets/images/bot-de-discussion.png', width: 30, height: 30, color: navigationProvider.selectedIndex == 2 ? Colors.white : colorScheme.onPrimary),
         Image.asset('assets/images/emploi.png', width: 30, height: 30, color: navigationProvider.selectedIndex == 3 ? Colors.white : colorScheme.onPrimary),
         Image.asset('assets/images/entrepot.png', width: 30, height: 30, color: navigationProvider.selectedIndex == 4 ? Colors.white : colorScheme.onPrimary),
